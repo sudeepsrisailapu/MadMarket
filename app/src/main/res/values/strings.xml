@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">MadMarket</string>
+    <string name="username_hint">Enter Username</string>
+    <string name="password_hint">Enter Password</string>
+    <string name="login_button">Log In</string>
+    <string name="signup_button">Create Account</string>
+    <string name="login_fail">login fail</string>
+    <string name="create_account">Create Account</string>
+
+</resources>
