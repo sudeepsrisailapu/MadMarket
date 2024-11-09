@@ -1,4 +1,5 @@
 package com.cs407.madmarket
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -67,7 +68,8 @@ class LoginActivity : AppCompatActivity(){
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
                     Toast.makeText(this, "Login Successful", Toast.LENGTH_SHORT).show()
-                    setContentView(R.layout.activity_main)
+                    startActivity(Intent(this, MainActivity::class.java))
+                    finish()
                 } else {
                     errorText.text = "Sign In Failed: ${task.exception?.message}"
                     errorText.visibility = TextView.VISIBLE

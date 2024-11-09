@@ -1,10 +1,7 @@
 package com.cs407.madmarket
 
 import android.os.Bundle
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.fragment.app.Fragment
 import com.cs407.madmarket.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -14,44 +11,43 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
+        // Set initial fragment
         replaceFragment(HomeFragment())
 
-        findViewById<BottomNavigationView>(R.id.bottomNavigationView).setOnItemSelectedListener { item ->
+        // Handle Bottom Navigation selections
+        binding.bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.home -> {
-                    replaceFragment(HomeFragment())
+                    if (getCurrentFragment() !is HomeFragment) replaceFragment(HomeFragment())
                 }
-
                 R.id.search -> {
-                    replaceFragment(SearchFragment())
+                    if (getCurrentFragment() !is SearchFragment) replaceFragment(SearchFragment())
                 }
-
                 R.id.cart -> {
-                    replaceFragment(CartFragment())
+                    if (getCurrentFragment() !is CartFragment) replaceFragment(CartFragment())
                 }
-
                 R.id.profile -> {
-                    replaceFragment(ProfileFragment())
+                    if (getCurrentFragment() !is ProfileFragment) replaceFragment(ProfileFragment())
                 }
-
                 R.id.messages -> {
-                    replaceFragment(MessagesFragment())
+                    if (getCurrentFragment() !is MessagesFragment) replaceFragment(MessagesFragment())
                 }
             }
-
-
-            return@setOnItemSelectedListener true
+            true
         }
-
     }
 
     private fun replaceFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.frame_layout, fragment::class.java, null)
-            .setReorderingAllowed(true).addToBackStack("Added " + fragment.toString()).commit()
+            .replace(R.id.frame_layout, fragment)
+            .setReorderingAllowed(true)
+            .commit()
     }
 
+    private fun getCurrentFragment(): Fragment? {
+        return supportFragmentManager.findFragmentById(R.id.frame_layout)
+    }
 }
