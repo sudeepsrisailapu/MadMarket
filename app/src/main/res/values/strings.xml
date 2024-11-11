@@ -6,5 +6,7 @@
     <string name="signup_button">Create Account</string>
     <string name="login_fail">login fail</string>
     <string name="create_account">Create Account</string>
-
+    <string name="username">Username</string>
+    <string name="bio">Enter Bio</string>
+    <string name="notifactions">Enable Notifications</string>
 </resources>
