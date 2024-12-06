@@ -7,6 +7,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 
 private lateinit var firebaseAuth: FirebaseAuth
 private lateinit var username:EditText
@@ -49,8 +50,24 @@ class LoginActivity : AppCompatActivity(){
                 firebaseAuth.createUserWithEmailAndPassword(username, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            Toast.makeText(this, "User Registered Successfully", Toast.LENGTH_SHORT).show()
-                            signInWithEmailPassword(username, password)
+                            val user = firebaseAuth.currentUser
+                            user?.let {
+                                val userProfile = hashMapOf(
+                                    "username" to username,
+                                    "bio" to "",
+                                    "notifications" to true
+                                )
+                                val db = FirebaseFirestore.getInstance()
+                                db.collection("users").document(it.uid)
+                                    .set(userProfile)
+                                    .addOnSuccessListener {
+                                        Toast.makeText(this, "User Registered Successfully", Toast.LENGTH_SHORT).show()
+                                        signInWithEmailPassword(username, password)
+                                    }
+                                    .addOnFailureListener { e ->
+                                        errorText.text = "Error storing user data: ${e.message}"
+                                    }
+                            }
                         } else {
                             errorText.text = "Registration Failed: ${task.exception?.message}"
                             errorText.visibility = TextView.VISIBLE
