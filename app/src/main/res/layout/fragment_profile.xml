@@ -14,7 +14,6 @@
         android:layout_height="64dp"
         android:contentDescription="TODO"
         android:src="@drawable/baseline_profile"
-
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_margin="16dp"
@@ -41,9 +40,8 @@
         android:id="@+id/usernameLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:text="@string/username"
-        app:layout_constraintTop_toBottomOf="@+id/menu"
+        app:layout_constraintTop_toBottomOf="@id/menu"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_marginTop="32dp"
         android:layout_marginStart="16dp"
@@ -53,7 +51,6 @@
         android:id="@+id/bioLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:text="@string/bio"
         app:layout_constraintTop_toBottomOf="@id/usernameEditText"
         app:layout_constraintStart_toStartOf="parent"
@@ -77,7 +74,6 @@
         android:id="@+id/bioEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-
         android:hint="Enter your bio"
         app:layout_constraintTop_toBottomOf="@id/bioLabel"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,4 +103,24 @@
         android:layout_marginEnd="16dp"
         />
 
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save"
+        app:layout_constraintTop_toBottomOf="@id/notificationsSwitch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"/>
+
+    <TextView
+        android:id="@+id/errorTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textColor="@android:color/holo_red_dark"
+        app:layout_constraintTop_toBottomOf="@id/saveButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
