@@ -9,4 +9,6 @@
     <string name="username">Username</string>
     <string name="bio">Enter Bio</string>
     <string name="notifactions">Enable Notifications</string>
+    <string name="email_hint">Enter Email</string>
+    <string name="email">Email</string>
 </resources>

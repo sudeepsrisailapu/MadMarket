@@ -10,11 +10,12 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 private lateinit var firebaseAuth: FirebaseAuth
-private lateinit var username:EditText
+private lateinit var email:EditText
 private lateinit var password:EditText
 private lateinit var errorText: TextView
 private lateinit var loginButton: Button
 private lateinit var signupButton: Button
+private lateinit var fStore : FirebaseFirestore
 
 
 
@@ -24,18 +25,19 @@ class LoginActivity : AppCompatActivity(){
         setContentView(R.layout.login)
 
         firebaseAuth = FirebaseAuth.getInstance()
+        fStore = FirebaseFirestore.getInstance()
 
-        username = findViewById(R.id.usernameEditText)
+        email = findViewById(R.id.emailEditText)
         password = findViewById(R.id.passwordEditText)
         errorText = findViewById(R.id.errorTextView)
         loginButton = findViewById(R.id.loginButton)
         signupButton = findViewById(R.id.SignupButton)
 
         loginButton.setOnClickListener {
-            val username = username.text.toString().trim()
+            val email = email.text.toString().trim()
             val password = password.text.toString().trim()
-            if (username.isNotEmpty() && password.isNotEmpty()) {
-                signInWithEmailPassword(username, password)
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                signInWithEmailPassword(email, password)
             } else {
                 errorText.text = "Please enter username and password"
                 errorText.visibility = TextView.VISIBLE
@@ -43,30 +45,34 @@ class LoginActivity : AppCompatActivity(){
         }
 
         signupButton.setOnClickListener {
-            val username = username.text.toString().trim()
+            val email = email.text.toString().trim()
             val password = password.text.toString().trim()
 
-            if (username.isNotEmpty() && password.isNotEmpty()) {
-                firebaseAuth.createUserWithEmailAndPassword(username, password)
+            if (email.isNotEmpty() && password.isNotEmpty()) {
+                firebaseAuth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener(this) { task ->
                         if (task.isSuccessful) {
-                            val user = firebaseAuth.currentUser
-                            user?.let {
+                            val userID = firebaseAuth.currentUser?.uid
+
+                            if (userID != null) {
+                                // Create a reference and set user data
                                 val userProfile = hashMapOf(
-                                    "username" to username,
+                                    "email" to email,
+                                    "username" to "",
                                     "bio" to "",
+                                    "password" to password,
                                     "notifications" to true
                                 )
-                                val db = FirebaseFirestore.getInstance()
-                                db.collection("users").document(it.uid)
+                                fStore.collection("users").document(userID)
                                     .set(userProfile)
                                     .addOnSuccessListener {
                                         Toast.makeText(this, "User Registered Successfully", Toast.LENGTH_SHORT).show()
-                                        signInWithEmailPassword(username, password)
+                                        signInWithEmailPassword(email, password)
                                     }
-                                    .addOnFailureListener { e ->
-                                        errorText.text = "Error storing user data: ${e.message}"
-                                    }
+                                    .addOnFailureListener { errorText.text = "Error storing user data" }
+                            }else{
+                                errorText.text = "Failed to retrieve user ID"
+                                errorText.visibility = TextView.VISIBLE
                             }
                         } else {
                             errorText.text = "Registration Failed: ${task.exception?.message}"
