@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -15,6 +16,7 @@ import androidx.activity.result.ActivityResult
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.google.android.gms.tasks.Task
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
@@ -119,7 +121,15 @@ class AddNewProductActivity : AppCompatActivity() {
 
         val uploadTask = filepath.putFile(imageUri)
 
+        uploadTask.addOnFailureListener{ exception ->
+            Log.e("OnFailureListener", "Image failed to upload: ${exception.message}")
+            Toast.makeText(this, "Image upload failed: ${exception.message}", Toast.LENGTH_SHORT).show()
+        }
 
+        uploadTask.addOnSuccessListener {
+            Log.d("OnSuccessListener", "Image uploaded")
+            Toast.makeText(this, "Image uploaded!", Toast.LENGTH_SHORT).show()
+            }
 
     }
 
