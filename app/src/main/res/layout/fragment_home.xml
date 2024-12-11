@@ -1,90 +1,37 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".HomeFragment">
 
-    <!-- Product Image -->
-    <ImageView
-        android:id="@+id/productImageView"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:src="@drawable/baseline_pedal_bike_24"
-        android:layout_marginBottom="8dp"/>
-
-    <!-- Product Title -->
-    <TextView
-        android:id="@+id/productTitle"
+    <EditText
+        android:id="@+id/productNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Bicycle"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:layout_marginBottom="8dp"/>
+        android:hint="Product Name" />
 
-    <!-- Product Price -->
-    <TextView
-        android:id="@+id/productPrice"
+    <EditText
+        android:id="@+id/productPriceEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="$50"
-        android:textSize="18sp"
-        android:textColor="@color/primary_color"
-        android:layout_marginBottom="8dp"/>
+        android:hint="Product Price"
+        android:inputType="numberDecimal" />
 
-    <!-- Product Rating -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="start"
-        android:layout_marginBottom="8dp">
-
-        <ImageView
-            android:id="@+id/ratingStar1"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/baseline_star_24" />
-
-        <ImageView
-            android:id="@+id/ratingStar2"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/baseline_star_24" />
-
-        <ImageView
-            android:id="@+id/ratingStar3"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/baseline_star_24" />
-
-        <ImageView
-            android:id="@+id/ratingStar4"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/baseline_star_border_24" />
-
-        <ImageView
-            android:id="@+id/ratingStar5"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:src="@drawable/baseline_star_border_24" />
-    </LinearLayout>
-
-    <!-- Add to Cart Button -->
     <Button
-        android:id="@+id/addToCartButton"
-        android:layout_width="match_parent"
+        android:id="@+id/addProductButton"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add to cart"
-        android:textColor="@android:color/white"
-        android:backgroundTint="@color/primary_color"
-        android:layout_marginTop="8dp" />
+        android:text="Add Product" />
 
+    <TextView
+        android:id="@+id/statusTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/productsRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 </LinearLayout>

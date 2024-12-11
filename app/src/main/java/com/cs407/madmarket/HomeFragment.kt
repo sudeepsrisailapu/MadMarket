@@ -1,59 +1,94 @@
 package com.cs407.madmarket
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.cs407.madmarket.ViewHolder.Product
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [HomeFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class HomeFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var productNameEditText: EditText
+    private lateinit var productPriceEditText: EditText
+    private lateinit var addProductButton: Button
+    private lateinit var statusTextView: TextView
+    private lateinit var productsRecyclerView: RecyclerView
+    private lateinit var db: FirebaseFirestore
+    private lateinit var productAdapter: ProductAdapter
+    private val productList = mutableListOf<Product>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
+
+        productNameEditText = view.findViewById(R.id.productNameEditText)
+        productPriceEditText = view.findViewById(R.id.productPriceEditText)
+        addProductButton = view.findViewById(R.id.addProductButton)
+        statusTextView = view.findViewById(R.id.statusTextView)
+        productsRecyclerView = view.findViewById(R.id.productsRecyclerView)
+        db = FirebaseFirestore.getInstance()
+
+        productAdapter = ProductAdapter(productList)
+        productsRecyclerView.layoutManager = LinearLayoutManager(context)
+        productsRecyclerView.adapter = productAdapter
+
+        addProductButton.setOnClickListener {
+            val productName = productNameEditText.text.toString()
+            val productPrice = productPriceEditText.text.toString().toDoubleOrNull()
+
+            if (productName.isNotEmpty() && productPrice != null) {
+                addProductToFirestore(productName, productPrice)
+            } else {
+                statusTextView.text = "Please enter valid product details."
+            }
+        }
+
+        fetchProductsFromFirestore()
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment HomeFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            HomeFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun addProductToFirestore(name: String, price: Double) {
+        val product = hashMapOf(
+            "name" to name,
+            "price" to price
+        )
+
+        db.collection("products")
+            .add(product)
+            .addOnSuccessListener {
+                statusTextView.text = "Product added successfully!"
+                fetchProductsFromFirestore() // Refresh the list
+            }
+            .addOnFailureListener { e ->
+                statusTextView.text = "Error adding product: ${e.message}"
+            }
+    }
+
+    private fun fetchProductsFromFirestore() {
+        db.collection("products")
+            .get()
+            .addOnSuccessListener { result ->
+                productList.clear()
+                for (document in result) {
+                    val product = document.toObject<Product>()
+                    productList.add(product)
                 }
+                productAdapter.notifyDataSetChanged()
+            }
+            .addOnFailureListener { e ->
+                statusTextView.text = "Error fetching products: ${e.message}"
             }
     }
 }
