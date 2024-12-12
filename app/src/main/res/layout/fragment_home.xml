@@ -5,24 +5,62 @@
     android:orientation="vertical"
     tools:context=".HomeFragment">
 
-    <EditText
-        android:id="@+id/productNameEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Product Name" />
-
-    <EditText
-        android:id="@+id/productPriceEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Product Price"
-        android:inputType="numberDecimal" />
-
     <Button
-        android:id="@+id/addProductButton"
+        android:id="@+id/toggleAddProductButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Add Product" />
+
+    <LinearLayout
+        android:id="@+id/addProductLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/productNameEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Product Name" />
+
+        <EditText
+            android:id="@+id/productPriceEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Product Price"
+            android:inputType="numberDecimal" />
+
+        <EditText
+            android:id="@+id/productDescriptionEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Product Description" />
+
+        <Button
+            android:id="@+id/takePictureButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Take Picture" />
+
+        <Button
+            android:id="@+id/selectFromGalleryButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Select from Gallery" />
+
+        <ImageView
+            android:id="@+id/productImageView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop" />
+
+        <Button
+            android:id="@+id/addProductButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Product" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/statusTextView"
