@@ -37,6 +37,12 @@
             android:layout_height="wrap_content"
             android:hint="Product Description" />
 
+        <EditText
+            android:id="@+id/productContactEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Contact Information" />
+
         <Button
             android:id="@+id/takePictureButton"
             android:layout_width="wrap_content"

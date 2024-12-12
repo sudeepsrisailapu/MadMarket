@@ -33,6 +33,7 @@ class HomeFragment : Fragment() {
     private lateinit var productNameEditText: EditText
     private lateinit var productPriceEditText: EditText
     private lateinit var productDescriptionEditText: EditText
+    private lateinit var productContactEditText: EditText // Add contact EditText
     private lateinit var takePictureButton: Button
     private lateinit var selectFromGalleryButton: Button
     private lateinit var productImageView: ImageView
@@ -65,6 +66,7 @@ class HomeFragment : Fragment() {
         productNameEditText = view.findViewById(R.id.productNameEditText)
         productPriceEditText = view.findViewById(R.id.productPriceEditText)
         productDescriptionEditText = view.findViewById(R.id.productDescriptionEditText)
+        productContactEditText = view.findViewById(R.id.productContactEditText) // Initialize contact EditText
         takePictureButton = view.findViewById(R.id.takePictureButton)
         selectFromGalleryButton = view.findViewById(R.id.selectFromGalleryButton)
         productImageView = view.findViewById(R.id.productImageView)
@@ -75,9 +77,11 @@ class HomeFragment : Fragment() {
         toggleAddProductButton = view.findViewById(R.id.toggleAddProductButton)
         db = FirebaseFirestore.getInstance()
 
-        productAdapter = ProductAdapter(productList, { product ->
-            addToCart(product)
-        }, showAddToCartButton = true)
+        productAdapter = ProductAdapter(
+            productList,
+            onAddToCartClick = { product -> addToCart(product) },
+            showAddToCartButton = true
+        )
         productsRecyclerView.layoutManager = LinearLayoutManager(context)
         productsRecyclerView.adapter = productAdapter
 
@@ -100,10 +104,11 @@ class HomeFragment : Fragment() {
             val productName = productNameEditText.text.toString()
             val productPrice = productPriceEditText.text.toString().toDoubleOrNull()
             val productDescription = productDescriptionEditText.text.toString()
+            val productContact = productContactEditText.text.toString() // Get contact information
             val productImageUrl = imageUri.toString()
 
-            if (productName.isNotEmpty() && productPrice != null && productDescription.isNotEmpty() && productImageUrl.isNotEmpty()) {
-                addProductToFirestore(productName, productPrice, productDescription, productImageUrl)
+            if (productName.isNotEmpty() && productPrice != null && productDescription.isNotEmpty() && productContact.isNotEmpty() && productImageUrl.isNotEmpty()) {
+                addProductToFirestore(productName, productPrice, productDescription, productImageUrl, productContact)
             } else {
                 statusTextView.text = "Please enter valid product details."
             }
@@ -181,12 +186,13 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun addProductToFirestore(name: String, price: Double, description: String, imageUrl: String) {
+    private fun addProductToFirestore(name: String, price: Double, description: String, imageUrl: String, contact: String) {
         val product = hashMapOf(
             "name" to name,
             "price" to price,
             "description" to description,
-            "imageUrl" to imageUrl
+            "imageUrl" to imageUrl,
+            "contact" to contact // Add contact information
         )
 
         db.collection("products")

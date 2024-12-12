@@ -1,59 +1,91 @@
 package com.cs407.madmarket
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.cs407.madmarket.ViewHolder.Product
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
 
-/**
- * A simple [Fragment] subclass.
- * Use the [SearchFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class SearchFragment : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
-    }
+    private lateinit var searchEditText: EditText
+    private lateinit var searchRecyclerView: RecyclerView
+    private lateinit var searchAdapter: ProductAdapter
+    private val productList = mutableListOf<Product>()
+    private val filteredList = mutableListOf<Product>()
+
+    private val cartViewModel: CartViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_search, container, false)
+        val view = inflater.inflate(R.layout.fragment_search, container, false)
+
+        searchEditText = view.findViewById(R.id.searchEditText)
+        searchRecyclerView = view.findViewById(R.id.searchRecyclerView)
+        searchAdapter = ProductAdapter(filteredList, { product ->
+            cartViewModel.addToCart(product)
+        }, showAddToCartButton = true)
+        searchRecyclerView.layoutManager = LinearLayoutManager(context)
+        searchRecyclerView.adapter = searchAdapter
+
+        // Fetch all products from Firestore
+        fetchProductsFromFirestore()
+
+        searchEditText.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filterProducts(s.toString())
+            }
+
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
+        return view
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment SearchFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            SearchFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+    private fun fetchProductsFromFirestore() {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("products")
+            .get()
+            .addOnSuccessListener { result ->
+                productList.clear()
+                for (document in result) {
+                    val product = document.toObject<Product>()
+                    productList.add(product)
+                }
+                filterProducts(searchEditText.text.toString())
+            }
+            .addOnFailureListener { e ->
+                // Handle error
+            }
+    }
+
+    private fun filterProducts(query: String) {
+        filteredList.clear()
+        if (query.isEmpty()) {
+            filteredList.addAll(productList)
+        } else {
+            for (product in productList) {
+                if (product.name.contains(query, ignoreCase = true) ||
+                    product.description.contains(query, ignoreCase = true)) {
+                    filteredList.add(product)
                 }
             }
+        }
+        searchAdapter.notifyDataSetChanged()
     }
 }

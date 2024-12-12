@@ -1,50 +1,18 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".SearchFragment">
 
-    <!-- Search Bar -->
     <EditText
         android:id="@+id/searchEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Try searching for bikes"
-        android:inputType="text"
-        android:drawableLeft="@drawable/baseline_search_24"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
-        android:textColor="@android:color/black"
-        android:textSize="16sp"
-        android:layout_marginBottom="16dp"
-        android:importantForAccessibility="yes" />
+        android:hint="Search products" />
 
-    <!-- Search Results Text -->
-    <TextView
-        android:id="@+id/searchResultsTextView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/searchRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Search results placeholder"
-        android:textSize="16sp"
-        android:textColor="@color/black"
-        android:gravity="center"
-        android:visibility="gone"
-        android:layout_marginTop="16dp" />
-
-    <!-- No Results Text -->
-    <TextView
-        android:id="@+id/noResultsTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="No resutls found"
-        android:textSize="16sp"
-        android:textColor="@color/gray"
-        android:visibility="gone"
-        android:gravity="center"
-        android:layout_marginTop="16dp" />
-
+        android:layout_height="wrap_content" />
 </LinearLayout>

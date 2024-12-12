@@ -8,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.cs407.madmarket.R
 import com.cs407.madmarket.ViewHolder.Product
 
 class ProductAdapter(
@@ -22,6 +21,7 @@ class ProductAdapter(
         val productNameTextView: TextView = itemView.findViewById(R.id.productNameTextView)
         val productPriceTextView: TextView = itemView.findViewById(R.id.productPriceTextView)
         val productDescriptionTextView: TextView = itemView.findViewById(R.id.productDescriptionTextView)
+        val productContactTextView: TextView = itemView.findViewById(R.id.productContactTextView)
         val addToCartButton: Button = itemView.findViewById(R.id.addToCartButton)
     }
 
@@ -36,6 +36,7 @@ class ProductAdapter(
         holder.productNameTextView.text = product.name
         holder.productPriceTextView.text = product.price.toString()
         holder.productDescriptionTextView.text = product.description
+        holder.productContactTextView.text = product.contact
         Glide.with(holder.itemView.context)
             .load(product.imageUrl)
             .into(holder.productImageView)
