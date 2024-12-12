@@ -14,8 +14,10 @@ import android.widget.EditText
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
@@ -45,6 +47,8 @@ class HomeFragment : Fragment() {
     private var currentPhotoPath: String? = null
     private var imageUri: Uri? = null
 
+    private val cartViewModel: CartViewModel by activityViewModels()
+
     companion object {
         private const val REQUEST_TAKE_PHOTO = 1
         private const val REQUEST_SELECT_FROM_GALLERY = 2
@@ -71,7 +75,9 @@ class HomeFragment : Fragment() {
         toggleAddProductButton = view.findViewById(R.id.toggleAddProductButton)
         db = FirebaseFirestore.getInstance()
 
-        productAdapter = ProductAdapter(productList)
+        productAdapter = ProductAdapter(productList, { product ->
+            addToCart(product)
+        }, showAddToCartButton = true)
         productsRecyclerView.layoutManager = LinearLayoutManager(context)
         productsRecyclerView.adapter = productAdapter
 
@@ -208,5 +214,10 @@ class HomeFragment : Fragment() {
             .addOnFailureListener { e ->
                 statusTextView.text = "Error fetching products: ${e.message}"
             }
+    }
+
+    private fun addToCart(product: Product) {
+        cartViewModel.addToCart(product)
+        Toast.makeText(context, "${product.name} added to cart", Toast.LENGTH_SHORT).show()
     }
 }

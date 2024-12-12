@@ -3,7 +3,6 @@ package com.cs407.madmarket
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
@@ -11,44 +10,36 @@ import com.bumptech.glide.Glide
 import com.cs407.madmarket.R
 import com.cs407.madmarket.ViewHolder.Product
 
-class ProductAdapter(
-    private val productList: List<Product>,
-    private val onAddToCartClick: ((Product) -> Unit)? = null,
-    private val showAddToCartButton: Boolean = true
-) : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>() {
+class CartAdapter(private var cartList: List<Product>) :
+    RecyclerView.Adapter<CartAdapter.CartViewHolder>() {
 
-    class ProductViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class CartViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val productImageView: ImageView = itemView.findViewById(R.id.productImageView)
         val productNameTextView: TextView = itemView.findViewById(R.id.productNameTextView)
         val productPriceTextView: TextView = itemView.findViewById(R.id.productPriceTextView)
         val productDescriptionTextView: TextView = itemView.findViewById(R.id.productDescriptionTextView)
-        val addToCartButton: Button = itemView.findViewById(R.id.addToCartButton)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ProductViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CartViewHolder {
         val itemView = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_product, parent, false)
-        return ProductViewHolder(itemView)
+        return CartViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
-        val product = productList[position]
+    override fun onBindViewHolder(holder: CartViewHolder, position: Int) {
+        val product = cartList[position]
         holder.productNameTextView.text = product.name
         holder.productPriceTextView.text = product.price.toString()
         holder.productDescriptionTextView.text = product.description
         Glide.with(holder.itemView.context)
             .load(product.imageUrl)
             .into(holder.productImageView)
-
-        if (showAddToCartButton) {
-            holder.addToCartButton.visibility = View.VISIBLE
-            holder.addToCartButton.setOnClickListener {
-                onAddToCartClick?.invoke(product)
-            }
-        } else {
-            holder.addToCartButton.visibility = View.GONE
-        }
     }
 
-    override fun getItemCount() = productList.size
+    override fun getItemCount() = cartList.size
+
+    fun updateCartList(newCartList: List<Product>) {
+        cartList = newCartList
+        notifyDataSetChanged()
+    }
 }

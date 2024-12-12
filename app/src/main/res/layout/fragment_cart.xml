@@ -1,54 +1,12 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp"
     tools:context=".CartFragment">
 
-    <!-- Cart Items List Placeholder -->
-    <LinearLayout
-        android:id="@+id/cartItemsList"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/cartRecyclerView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        android:paddingBottom="16dp">
-
-        <!-- Placeholder Item -->
-        <TextView
-            android:id="@+id/cartItemPlaceholder"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="cart item placeholder"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:gravity="center"
-            android:visibility="gone"
-            android:layout_marginBottom="8dp" />
-
-    </LinearLayout>
-
-    <!-- Total Price Section -->
-    <TextView
-        android:id="@+id/totalPriceTextView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Total price: "
-        android:textSize="18sp"
-        android:textColor="@color/black"
-        android:gravity="end"
-        android:layout_marginBottom="16dp" />
-
-    <!-- Checkout Button -->
-    <Button
-        android:id="@+id/checkoutButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Checkout"
-        android:textColor="@android:color/white"
-        android:backgroundTint="@color/primary_color" />
-
+        android:layout_height="wrap_content" />
 </LinearLayout>

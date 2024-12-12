@@ -53,6 +53,7 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(platform("com.google.firebase:firebase-bom:32.0.0"))  // Use the latest BoM version
 
+
     // Firebase libraries (no need to specify version numbers here)
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-firestore")
@@ -60,5 +61,6 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.firebase:firebase-storage")
     implementation("com.github.bumptech.glide:glide:4.12.0")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 }
